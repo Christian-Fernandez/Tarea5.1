@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form>
+<input id="num1" type="number">
+<input id="num2" type="number">
+</form>
+<button id="sumar">Sumar</button>
+<h2 id="sum"></h2>
+
+<script>
+    function loadDoc(){
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function (){
+            if(this.readyState == 4 && this.status==200){
+                document.getElementById("sum").innerHTML=this.response;
+            }
+        };
+        xhttp.open("GET",`ejercicio02.php?num1=${document.getElementById("num1").value}&num2=${document.getElementById("num2").value}`,true);
+        xhttp.send();
+        return false;
+    }
+
+    document.getElementById("sumar").addEventListener(
+        "click",
+        function (e){
+
+            loadDoc();
+        }
+        ),false;
+</script>
+</body>
+</html>

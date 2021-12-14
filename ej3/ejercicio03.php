@@ -1,9 +1,54 @@
 <?php
-$num1 = $_GET["num1"];
-$num2 = $_GET["num2"];
+define("CADENA_CONEXION","mysql:dbname=pedidos;host=127.0.0.1");
+define ("USUARIO_CONEXION","root");
+define ("CLAVE_CONEXION","");
 
-if(!isset($num1) || !isset($num2) || !is_numeric($num1) || !is_numeric($num2) ){
-    echo "ERROR:Introduce un número.";
-}else{
-    echo "La suma de los números es de: " . ($num1+$num2);
+function  cargar_categorias(){
+    try{
+        $bd=new PDO(CADENA_CONEXION,USUARIO_CONEXION,CLAVE_CONEXION);
+
+        $ins = "SELECT CodCat,Nombre FROM categoria";
+        $resul = $bd->query($ins);
+
+        if(!$resul){
+            return FALSE;
+        }
+        if($resul->rowCount() === 0){
+            return FALSE;
+        }
+
+        return $resul;
+    }catch(PDOException $e){
+        echo "Error con la base de datos:" . $e->getMessage();
+    }
 }
+
+function  cargar_productos_categoria($codCat){
+    try{
+        $bd=new PDO(CADENA_CONEXION,USUARIO_CONEXION,CLAVE_CONEXION);
+
+        $ins = "SELECT * FROM productos WHERE CodCat=$codCat";
+        $resul = $bd->query($ins);
+
+        if(!$resul){
+            return FALSE;
+        }
+        if($resul->rowCount() === 0){
+            return FALSE;
+        }
+
+        return $resul;
+    }catch(PDOException $e){
+        echo "Error con la base de datos:" . $e->getMessage();
+    }
+
+}
+
+if(isset($_GET["prod"])){
+
+    cargar_productos_categoria($_GET["prod"]);
+
+}else{
+    cargar_categorias();
+}
+

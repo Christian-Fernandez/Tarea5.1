@@ -6,32 +6,34 @@
 </head>
 <body>
 
-<input id="num1" type="number">
-<input id="num2" type="number">
-<button id="sumar">Sumar</button>
 
-<h2 id="sum"></h2>
+<div id="contenido">
+
+</div>
 
 <script>
-    function loadDoc(){
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function (){
-            if(this.readyState == 4 && this.status==200){
-                document.getElementById("sum").innerHTML=this.response;
-            }
-        };
-        xhttp.open("GET",`ejercicio02.php?num1=${document.getElementById("num1").value}&num2=${document.getElementById("num2").value}`,true);
-        xhttp.send();
-        return false;
-    }
 
-    document.getElementById("sumar").addEventListener(
-        "click",
-        function (e){
+    window.onload = ()=> {
 
-            loadDoc();
+        function loadDoc() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    let json = JSON.parse(this.response);
+                    document.getElementById("contenido").innerHTML = "<table><th>CodCat</th> <th>Nombre</th> <th>Descripción</th>";
+                    json.map(function (v) {
+                        document.getElementById("contenido").innerHTML += "";
+                    });
+                    document.getElementById("contenido").innerHTML ="</table>";
+                }
+            };
+            xhttp.open("GET",`ejercicio02.php`, true);
+            xhttp.send();
+            return false;
         }
-        ),false;
+
+        loadDoc();
+    }
 </script>
 </body>
 </html>

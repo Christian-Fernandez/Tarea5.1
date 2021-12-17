@@ -15,24 +15,56 @@
 
     window.onload = ()=> {
 
-        function loadDoc() {
+        function loadCategoria() {
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
                 if (this.readyState == 4 && this.status == 200) {
                     let json = JSON.parse(this.response);
-                    document.getElementById("contenido").innerHTML = "<table><th>CodCat</th> <th>Nombre</th> <th>Descripción</th>";
+                    let tabla = document.createElement("table");
+                    tabla.innerHTML = "<tr><th>CodCat</th> <th>Nombre</th> <th>Descripción</th></tr>";
                     json.map(function (v) {
-                        document.getElementById("contenido").innerHTML += "";
+                        tabla.innerHTML += `<tr><td>${v.CodCat}</td><td><a name="a" href="#" id="${v.CodCat}">${v.Nombre}</a></td><td>${v.Descripcion}</td></tr>`;
                     });
-                    document.getElementById("contenido").innerHTML ="</table>";
+                    document.getElementById("contenido").innerHTML="";
+                    document.getElementById("contenido").appendChild(tabla);
                 }
             };
-            xhttp.open("GET",`ejercicio02.php`, true);
+            xhttp.open("GET",`ejercicio03.php`, true);
             xhttp.send();
             return false;
         }
 
-        loadDoc();
+        function loadProductos(id) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    let json = JSON.parse(this.response);
+                    let tabla = document.createElement("table");
+                    tabla.innerHTML = "<tr><th>codProd</th> <th>Nombre</th> <th>Descripción</th><th>Peso</th><th>Stock</th><th>CodCat</th></tr>";
+                    json.map(function (v) {
+                        tabla.innerHTML += `<tr><td>${v.codProd}</td><td>${v.Nombre}</td><td>${v.Descripcion}</td><td>${v.Peso}</td><td>${v.Stock}</td><td>${v.CodCat}</td></tr>`;
+                    });
+
+                    document.getElementById("contenido").innerHTML="";
+                    document.getElementById("contenido").appendChild(tabla);
+                    document.getElementById("contenido").innerHTML+="<a id='volver' href='#'>Volver a las Categorias</a>";
+                }
+            };
+            xhttp.open("GET",`ejercicio03.php?prod=${id}`, true);
+            xhttp.send();
+            return false;
+        }
+
+        document.addEventListener("click",
+            function (e){
+                if(e.target.name=="a") {
+                    loadProductos(e.target.id);
+                }else if(e.target.id=="volver"){
+                    loadCategoria();
+                }
+            },false);
+
+        loadCategoria();
     }
 </script>
 </body>

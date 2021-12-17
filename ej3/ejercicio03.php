@@ -7,7 +7,7 @@ function  cargar_categorias(){
     try{
         $bd=new PDO(CADENA_CONEXION,USUARIO_CONEXION,CLAVE_CONEXION);
 
-        $ins = "SELECT CodCat,Nombre FROM categoria";
+        $ins = "SELECT CodCat,Nombre,Descripcion FROM categoria";
         $resul = $bd->query($ins);
 
         if(!$resul){
@@ -17,7 +17,9 @@ function  cargar_categorias(){
             return FALSE;
         }
 
-        return $resul;
+        $resul=$resul->fetchAll();
+        echo json_encode($resul);
+
     }catch(PDOException $e){
         echo "Error con la base de datos:" . $e->getMessage();
     }
@@ -36,8 +38,9 @@ function  cargar_productos_categoria($codCat){
         if($resul->rowCount() === 0){
             return FALSE;
         }
+        $resul=$resul->fetchAll();
+        echo json_encode($resul);
 
-        return $resul;
     }catch(PDOException $e){
         echo "Error con la base de datos:" . $e->getMessage();
     }
